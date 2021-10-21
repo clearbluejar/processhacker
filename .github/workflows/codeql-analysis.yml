@@ -19,6 +19,7 @@ on:
     branches: [ master ]
   schedule:
     - cron: '15 22 * * 5'
+  workflow_dispatch:
 
 jobs:
   analyze:
@@ -53,8 +54,9 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    # - name: Autobuild
-    #  uses: github/codeql-action/autobuild@v1
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
+      if: matrix.language == 'csharp'
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
@@ -64,7 +66,8 @@ jobs:
     #    uses a compiled language
 
     - run: |
-       .\build\build_release.cmd       
+       .\build\build_release.cmd
+      if: matrix.language == 'cpp'
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
